@@ -115,7 +115,7 @@ data_prepared = ["".join(i) for i in data_prepared]
 data_prepared = dict((x,data_prepared.count(x)) for x in set(data_prepared))
 #print data_prepared
 
-data_prepared = dict((key,val) for key,val in data_prepared.iteritems() if 'E' not in key or key[:-1] == 'E')
+data_prepared = dict((key,val) for key,val in data_prepared.iteritems() if (key[-1] == 'E' and 'E' not in key[:-1]) or 'E' not in key)
 data_prepared = sorted(data_prepared.items(), key=operator.itemgetter(1), reverse=True)
 
 print data_prepared
