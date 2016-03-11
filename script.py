@@ -18,17 +18,33 @@ logic = ['and', 'andi', 'lui', 'nor', 'or', 'ori', 'xor', 'xori', 'dsll', 'dsll3
 
 move = ['mfhi', 'mflo', 'movf', 'movn', 'movt', 'movz', 'mthi', 'mtlo']
 
-floating = ['abs.fmt',
-'add.fmt', 'div.fmt', 'madd.fmt', 'msub.fmt', 'mul.fmt', 'neg.fmt', 'nmadd.fmt', 'recip.fmt',
-'rsqrt.fmt', 'sqrt.fmt', 'sub.fmt', 'c.fmt', 'ceil.fmt', 'cvt.fmt', 'floor.fmt', 'round.fmt', 'trunc.fmt',
-'cfc1.fmt', 'ctc1.fmt', 'dmfc1.fmt', 'dmtc1.fmt', 'mtc1.fmt', 'mfc1.fmt', 'mov.fmt', 'movf.fmt',
-'movn.fmt', 'movt.fmt', 'movz.fmt']
+floating = [
+'abs.S', 'add.S', 'div.S', 'madd.S', 'msub.S', 'mul.S', 'neg.S', 'nmadd.S', 'recip.S',
+'rsqrt.S', 'sqrt.S', 'sub.S', 'ceil.W.S', 'ceil.L.S', 'floor.S', 'round.S', 'trunc.S',
+'cfc1,' 'ctc1', 'dmfc1', 'dmtc1', 'mtc1', 'mfc1', 'mov.S', 'movf.S',
+'movn.S', 'movt.S', 'movz.S',
 
-nope = ['nop', 'ssnop']
+'abs.D', 'add.D', 'div.D', 'madd.D', 'msub.D', 'mul.D', 'neg.D', 'nmadd.D', 'recip.D',
+'rsqrt.D', 'sqrt.D', 'sub.D', 'ceil.W.D', 'ceil.L.D', 'cvt.D', 'floor.D', 'round.D', 'trunc.D',
+'mov.D', 'movf.D','movn.D', 'movt.D', 'movz.D',
 
-#ctc1 - check!
+'abs.ps', 'add.ps', 'div.ps', 'madd.ps', 'msub.ps', 'mul.ps', 'neg.ps', 'nmadd.ps', 'recip.ps',
+'rsqrt.ps', 'sqrt.ps', 'sub.ps', 'ceil.ps', 'cvt.ps', 'floor.ps', 'round.ps', 'trunc.ps',
+'mov.ps', 'movf.ps', 'movn.ps', 'movt.ps', 'movz.ps',
+
+'c.F.S', 'c.UN.S', 'c.EQ.S', 'c.UEQ.S', 'c.OLT.S', 'c.ULT.S', 'c.OLE.S', 'c.ULE.S', 'c.SF.S',
+'c.NGLE.S', 'c.SEQ.S', 'c.NGL.S', 'c.LT.S', 'c.NGE.S', 'c.LE.S', 'c.NGT.S',
+'c.F.D', 'c.UN.D', 'c.EQ.D', 'c.UEQ.D', 'c.OLT.D', 'c.ULT.D', 'c.OLE.D', 'c.ULE.D', 'c.SF.D',
+'c.NGLE.D', 'c.SEQ.D', 'c.NGL.D', 'c.LT.D', 'c.NGE.D', 'c.LE.D', 'c.NGT.D',
+'c.F.ps', 'c.UN.ps', 'c.EQ.ps', 'c.UEQ.ps', 'c.OLT.ps', 'c.ULT.ps', 'c.OLE.ps', 'c.ULE.ps', 'c.SF.ps',
+'c.NGLE.ps', 'c.SEQ.ps', 'c.NGL.ps', 'c.LT.ps', 'c.NGE.ps', 'c.LE.ps', 'c.NGT.ps',
+'cvt.D.S', 'cvt.D.W','cvt.D.L', 'cvt.L.S','cvt.L.D','cvt.ps.S', 'cvt.S.D', 'cvt.S.W','cvt.S.L', 'cvt.S.PL', 'cvt.S.PU',
+'cvt.W.S', 'cvt.W.D']
+
+nop = ['nop', 'ssnop', 'ehb']
+
 privileged = ['cache', 'cfc0', 'ctc0', 'dmfc0', 'dmtc0', 'eret', 'mfc0',
-'mtc0', 'tlbp', 'tlbr', 'tlbwi', 'tlbwr','wait','ctc1']
+'mtc0', 'tlbp', 'tlbr', 'tlbwi', 'tlbwr','wait']
 
 
 def chunks(l, n):
@@ -49,10 +65,12 @@ def instruction_annotation(x):
         return 'M'
     elif x in floating:
         return 'F'
-    elif x in nope:
+    elif x in nop:
         return 'N'
     elif x in privileged:
         return 'P'
+    elif x in trap:
+        return 'T'
     elif x == 'E':
         return x
     else :
@@ -118,7 +136,11 @@ data_prepared = dict((x,data_prepared.count(x)) for x in set(data_prepared))
 data_prepared = dict((key,val) for key,val in data_prepared.iteritems() if 'E' not in key or key[:-1] == 'E')
 data_prepared = sorted(data_prepared.items(), key=operator.itemgetter(1), reverse=True)
 
-print data_prepared
+f = open('tab.txt', 'w')
+for index in data_prepared:
+   f.write(str(index) + '\n')
+f.close()
+#print data_prepared
 
 
 
